@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Escala de Ministérios - Igreja Evangélica Cristã Abba Pai</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-text-size-adjust: 100%;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            font-size: 15px;
+            line-height: 1.4;
+            color: #333;
+            background-color: #f5f5f5;
+            padding: 10px;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            color: white;
+            padding: 16px 12px;
+            border-radius: 12px 12px 0 0;
+            text-align: center;
+            margin-bottom: 2px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 18px;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+        
+        .header p {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+        
+        .month-section {
+            margin-bottom: 18px;
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+        
+        .month-header {
+            background-color: #34B7F1;
+            color: white;
+            padding: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .month-header i {
+            margin-right: 8px;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            width: 100%;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+        
+        th {
+            background-color: #f8f9fa;
+            color: #555;
+            font-weight: 600;
+            font-size: 13px;
+            padding: 12px 8px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        td {
+            padding: 12px 8px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+            vertical-align: top;
+        }
+        
+        tr:last-child td {
+            border-bottom: none;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #fcfcfc;
+        }
+        
+        .date-cell {
+            font-weight: 600;
+            color: #128C7E;
+            white-space: nowrap;
+        }
+        
+        .day-cell {
+            font-weight: 500;
+            color: #666;
+            white-space: nowrap;
+        }
+        
+        .santa-ceia-obs {
+            background-color: #FFF3CD;
+            color: #856404;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        
+        .congresso {
+            background-color: #F8D7DA;
+            color: #721C24;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        
+        .instructions {
+            background-color: white;
+            padding: 16px;
+            border-radius: 10px;
+            margin-top: 20px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            font-size: 14px;
+            color: #555;
+        }
+        
+        .instructions h3 {
+            color: #128C7E;
+            margin-bottom: 10px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            margin-top: 8px;
+        }
+        
+        .instructions li {
+            margin-bottom: 6px;
+        }
+        
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 12px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            gap: 5px;
+        }
+        
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 16px;
+            color: #777;
+            font-size: 13px;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        /* WhatsApp specific optimizations */
+        @media (max-width: 480px) {
+            body {
+                font-size: 14px;
+                padding: 8px;
+            }
+            
+            th, td {
+                padding: 10px 6px;
+                font-size: 13px;
+            }
+            
+            .month-header {
+                padding: 10px;
+                font-size: 15px;
+            }
+            
+            .header {
+                padding: 14px 10px;
+            }
+        }
+        
+        /* Print styles */
+        @media print {
+            body {
+                background-color: white;
+                font-size: 12px;
+            }
+            
+            .header, .month-header {
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
+            }
+            
+            .instructions, .footer {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-calendar-alt"></i> Escala de Ministérios - Igreja Evangélica Cristã Abba Pai</h1>
+            <p>Período: Fevereiro 2026</p>
+        </div>
+        
+        <!-- Legend -->
+        <div class="instructions">
+            <h3><i class="fas fa-info-circle"></i> Informações Importantes</h3>
+            <p><strong>Como usar:</strong> Role para os lados para ver toda a tabela em dispositivos móveis.</p>
+            
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #FFF3CD;"></div>
+                    <span>Santa Ceia</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #F8D7DA;"></div>
+                    <span>Congresso</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Fevereiro 2026 -->
+        <div class="month-section">
+            <div class="month-header">
+                <span><i class="far fa-calendar"></i> 📅 FEVEREIRO 2026</span>
+                <span>8 dias de escala</span>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Dia</th>
+                            <th>Palavra</th>
+                            <th>Louvor</th>
+                            <th>Intercessão</th>
+                            <th>Recepção</th>
+                            <th>Oferta</th>
+                            <th>AudioVisual</th>
+                            <th>Mídia</th>
+                            <th>Kids</th>
+                            <th>Oração Kids</th>
+                            <th>Observação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="date-cell">01/fev</td>
+                            <td class="day-cell">Domingo</td>
+                            <td>Evaldo</td>
+                            <td>Pra. Elizabeth</td>
+                            <td>Arnaldo e Nilza</td>
+                            <td>Marcio e Regiane</td>
+                            <td>Henrique</td>
+                            <td>Henrique</td>
+                            <td>Claudio e Sueli</td>
+                            <td>Cristiane e Renan</td>
+                            <td>Cristiane</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="date-cell">04/fev</td>
+                            <td class="day-cell">Quarta-feira</td>
+                            <td>Beatriz</td>
+                            <td>Vera</td>
+                            <td>Solange</td>
+                            <td>Arnaldo</td>
+                            <td>Jessica</td>
+                            <td>Renan</td>
+                            <td>Brenda</td>
+                            <td>—</td>
+                            <td>—</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="date-cell">08/fev</td>
+                            <td class="day-cell">Domingo</td>
+                            <td>Pr Bruno</td>
+                            <td>Daniel</td>
+                            <td>Evaldo e Barbara</td>
+                            <td>Rafael e Michele</td>
+                            <td>Fernanda</td>
+                            <td>—</td>
+                            <td>Claudio e Sueli</td>
+                            <td>Cristiane e Renan</td>
+                            <td>Cristiane</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="date-cell">11/fev</td>
+                            <td class="day-cell">Quarta-feira</td>
+                            <td>Henrique</td>
+                            <td>Beatriz</td>
+                            <td>Nilza</td>
+                            <td>Renan</td>
+                            <td>Gustavo</td>
+                            <td>Henrique</td>
+                            <td>Renan</td>
+                            <td>—</td>
+                            <td>—</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="date-cell">15/fev</td>
+                            <td class="day-cell">Domingo</td>
+                            <td>Pr. Nelson</td>
+                            <td>Pra. Elizabeth</td>
+                            <td>Rafael e Michele</td>
+                            <td>Helio e Cida</td>
+                            <td>Priscila</td>
+                            <td>Renan</td>
+                            <td>Claudio e Sueli</td>
+                            <td><span class="congresso">🚫 CONGRESSO</span></td>
+                            <td>—</td>
+                            <td><span class="santa-ceia-obs">🥖 SANTA CEIA</span></td>
+                        </tr>
+                        <tr>
+                            <td class="date-cell">18/fev</td>
+                            <td class="day-cell">Quarta-feira</td>
+                            <td>Arnaldo</td>
+                            <td>Pra. Elizabeth</td>
+                            <td>Nilza</td>
+                            <td>Arnaldo</td>
+                            <td>Solange</td>
+                            <td>Renan</td>
+                            <td>Brenda</td>
+                            <td>—</td>
+                            <td>—</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="date-cell">22/fev</td>
+                            <td class="day-cell">Domingo</td>
+                            <td>Marcio</td>
+                            <td>Beatriz</td>
+                            <td>Marcio e Regiane</td>
+                            <td>Claudio e Sueli</td>
+                            <td>Renan</td>
+                            <td>Henrique</td>
+                            <td>Brenda</td>
+                            <td>Jéssica e Bárbara</td>
+                            <td>Jéssica</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="date-cell">25/fev</td>
+                            <td class="day-cell">Quarta-feira</td>
+                            <td>Leônidas</td>
+                            <td>Pra. Elizabeth</td>
+                            <td>Jessica</td>
+                            <td>Arnaldo</td>
+                            <td>Joelson</td>
+                            <td>Henrique</td>
+                            <td>Renan</td>
+                            <td>—</td>
+                            <td>—</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>© 2026 - Escala de Ministérios - Igreja Evangélica Cristã Abba Pai</p>
+            <p><i class="fas fa-sync-alt"></i> Atualizado em fevereiro 2026</p>
+        </div>
+    </div>
+</body>
+</html>
