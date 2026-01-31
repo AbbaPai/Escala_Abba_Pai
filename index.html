@@ -201,6 +201,16 @@
             border-top: 1px solid #e0e0e0;
         }
         
+        .update-info {
+            margin-top: 5px;
+            font-size: 12px;
+            color: #999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        
         /* WhatsApp specific optimizations */
         @media (max-width: 480px) {
             body {
@@ -220,6 +230,11 @@
             
             .header {
                 padding: 14px 10px;
+            }
+            
+            .update-info {
+                flex-direction: column;
+                gap: 3px;
             }
         }
         
@@ -295,8 +310,8 @@
                             <td class="day-cell">Domingo</td>
                             <td>Evaldo</td>
                             <td>Pra. Elizabeth</td>
-                            <td>Arnaldo e Nilza</td>
                             <td>Marcio e Regiane</td>
+                            <td>Rafael e Michele</td>
                             <td>Henrique</td>
                             <td>Henrique</td>
                             <td>Claudio e Sueli</td>
@@ -324,7 +339,7 @@
                             <td>Pr Bruno</td>
                             <td>Daniel</td>
                             <td>Evaldo e Barbara</td>
-                            <td>Rafael e Michele</td>
+                            <td>Arnaldo e Nilza</td>
                             <td>Fernanda</td>
                             <td>—</td>
                             <td>Claudio e Sueli</td>
@@ -409,7 +424,10 @@
         
         <div class="footer">
             <p>© 2026 - Escala de Ministérios - Igreja Evangélica Cristã Abba Pai</p>
-            <p><i class="fas fa-sync-alt"></i> Atualizado em fevereiro 2026</p>
+            <div class="update-info">
+                <i class="fas fa-sync-alt"></i>
+                <span>Atualizado em: 01/02/2026 às 20:50</span>
+            </div>
         </div>
     </div>
 </body>
