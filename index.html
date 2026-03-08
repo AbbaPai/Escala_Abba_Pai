@@ -6,6 +6,7 @@
     <title>Escala de Ministérios - Igreja Evangélica Cristã Abba Pai</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Melhorias visuais para melhor legibilidade */
         * {
             margin: 0;
             padding: 0;
@@ -15,12 +16,12 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            font-size: 15px;
-            line-height: 1.4;
-            color: #333;
-            background-color: #f5f5f5;
-            padding: 10px;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
+            color: #1a1a1a;
+            background-color: #fafafa;
+            padding: 12px;
             max-width: 100%;
             overflow-x: hidden;
         }
@@ -31,53 +32,67 @@
         }
         
         .header {
-            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            background: linear-gradient(135deg, #0d6b4c 0%, #0a5a40 100%);
             color: white;
-            padding: 16px 12px;
-            border-radius: 12px 12px 0 0;
+            padding: 20px 15px;
+            border-radius: 15px 15px 0 0;
             text-align: center;
-            margin-bottom: 2px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 3px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
         
         .header h1 {
-            font-size: 18px;
-            margin-bottom: 4px;
-            font-weight: 600;
+            font-size: 22px;
+            margin-bottom: 8px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
         }
         
         .header p {
-            font-size: 13px;
-            opacity: 0.9;
+            font-size: 16px;
+            opacity: 0.95;
+            font-weight: 500;
         }
         
         .month-section {
-            margin-bottom: 18px;
+            margin-bottom: 25px;
             background-color: white;
-            border-radius: 10px;
+            border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: 1px solid #e0e0e0;
         }
         
         .month-header {
-            background-color: #34B7F1;
+            background-color: #1a5f7a;
             color: white;
-            padding: 12px;
-            font-weight: 600;
-            font-size: 16px;
+            padding: 15px 20px;
+            font-weight: 700;
+            font-size: 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            border-bottom: 3px solid #0d3b4f;
         }
         
         .month-header i {
-            margin-right: 8px;
+            margin-right: 12px;
+            font-size: 22px;
+        }
+        
+        .month-header span:last-child {
+            background-color: rgba(255,255,255,0.2);
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
         }
         
         .table-container {
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
             width: 100%;
+            background-color: white;
         }
         
         table {
@@ -87,23 +102,25 @@
         }
         
         th {
-            background-color: #f8f9fa;
-            color: #555;
-            font-weight: 600;
-            font-size: 13px;
-            padding: 12px 8px;
+            background-color: #f0f7fa;
+            color: #0a3b4f;
+            font-weight: 700;
+            font-size: 15px;
+            padding: 16px 12px;
             text-align: left;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 3px solid #c0d4e0;
             position: sticky;
             top: 0;
             z-index: 10;
+            white-space: nowrap;
         }
         
         td {
-            padding: 12px 8px;
-            border-bottom: 1px solid #f0f0f0;
-            font-size: 14px;
+            padding: 14px 12px;
+            border-bottom: 1px solid #e6eef2;
+            font-size: 15px;
             vertical-align: top;
+            color: #2d3e4f;
         }
         
         tr:last-child td {
@@ -111,130 +128,239 @@
         }
         
         tr:nth-child(even) {
-            background-color: #fcfcfc;
+            background-color: #f9fcfd;
+        }
+        
+        tr:hover td {
+            background-color: #e8f0f5;
+            cursor: default;
         }
         
         .date-cell {
-            font-weight: 600;
-            color: #128C7E;
+            font-weight: 700;
+            color: #0d5c7a;
             white-space: nowrap;
+            font-size: 16px;
         }
         
         .day-cell {
-            font-weight: 500;
-            color: #666;
+            font-weight: 600;
+            color: #4a5c6b;
             white-space: nowrap;
         }
         
         .santa-ceia-obs {
-            background-color: #FFF3CD;
-            color: #856404;
-            font-weight: 600;
-            padding: 4px 8px;
-            border-radius: 4px;
+            background-color: #fff3d6;
+            color: #7a5c00;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 30px;
             display: inline-block;
-        }
-        
-        .congresso {
-            background-color: #F8D7DA;
-            color: #721C24;
-            font-weight: 600;
-            padding: 4px 8px;
-            border-radius: 4px;
-            display: inline-block;
+            font-size: 14px;
+            border: 1px solid #e6c777;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
         
         .instructions {
             background-color: white;
-            padding: 16px;
-            border-radius: 10px;
-            margin-top: 20px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-            font-size: 14px;
-            color: #555;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0 25px 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            font-size: 16px;
+            color: #1a3b4f;
+            border-left: 6px solid #1a5f7a;
         }
         
         .instructions h3 {
-            color: #128C7E;
-            margin-bottom: 10px;
-            font-size: 16px;
+            color: #0d4b6b;
+            margin-bottom: 15px;
+            font-size: 20px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
+            font-weight: 700;
+        }
+        
+        .instructions h3 i {
+            color: #1a5f7a;
+            font-size: 24px;
         }
         
         .instructions ul {
-            padding-left: 20px;
-            margin-top: 8px;
+            padding-left: 25px;
+            margin-top: 12px;
         }
         
         .instructions li {
-            margin-bottom: 6px;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .instructions li strong {
+            color: #0d4b6b;
+            font-weight: 700;
         }
         
         .legend {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 12px;
+            gap: 20px;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px dashed #c0d4e0;
         }
         
         .legend-item {
             display: flex;
             align-items: center;
-            font-size: 12px;
-            gap: 5px;
+            font-size: 15px;
+            gap: 10px;
+            background-color: #f8f8f8;
+            padding: 8px 16px;
+            border-radius: 40px;
+            border: 1px solid #e0e0e0;
         }
         
         .legend-color {
-            width: 12px;
-            height: 12px;
-            border-radius: 2px;
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         
         .footer {
             text-align: center;
-            margin-top: 20px;
-            padding: 16px;
-            color: #777;
-            font-size: 13px;
-            border-top: 1px solid #e0e0e0;
+            margin-top: 30px;
+            padding: 20px;
+            color: #5a6b7a;
+            font-size: 15px;
+            border-top: 2px solid #e0e8f0;
+            background-color: white;
+            border-radius: 0 0 15px 15px;
         }
         
         .update-info {
-            margin-top: 5px;
-            font-size: 12px;
-            color: #999;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #6b7b8a;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 8px;
+            background-color: #f0f7fa;
+            padding: 8px 16px;
+            border-radius: 40px;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Loading state */
+        .loading {
+            text-align: center;
+            padding: 50px;
+            background: white;
+            border-radius: 15px;
+            font-size: 18px;
+            color: #1a5f7a;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .loading i {
+            margin-right: 12px;
+            font-size: 24px;
+        }
+        
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 50px;
+            background: white;
+            border-radius: 15px;
+            font-size: 18px;
+            color: #4a5c6b;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .empty-state i {
+            font-size: 56px;
+            color: #b0c4d9;
+            margin-bottom: 20px;
+        }
+        
+        /* Column filter indicator */
+        .filter-info {
+            background-color: #e2ebf2;
+            color: #144a66;
+            padding: 12px 18px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-left: 6px solid #1a5f7a;
+            font-weight: 500;
+        }
+        
+        .filter-info i {
+            color: #1a5f7a;
+            font-size: 20px;
         }
         
         /* WhatsApp specific optimizations */
         @media (max-width: 480px) {
             body {
-                font-size: 14px;
-                padding: 8px;
-            }
-            
-            th, td {
-                padding: 10px 6px;
-                font-size: 13px;
-            }
-            
-            .month-header {
+                font-size: 15px;
                 padding: 10px;
+            }
+            
+            th {
+                font-size: 14px;
+                padding: 14px 8px;
+            }
+            
+            td {
+                padding: 12px 8px;
+                font-size: 14px;
+            }
+            
+            .date-cell {
                 font-size: 15px;
             }
             
-            .header {
-                padding: 14px 10px;
+            .month-header {
+                padding: 12px 15px;
+                font-size: 18px;
+            }
+            
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            .header p {
+                font-size: 15px;
+            }
+            
+            .instructions h3 {
+                font-size: 18px;
+            }
+            
+            .legend-item {
+                font-size: 14px;
+                padding: 6px 12px;
             }
             
             .update-info {
                 flex-direction: column;
-                gap: 3px;
+                gap: 5px;
+                width: 100%;
+            }
+            
+            .santa-ceia-obs {
+                padding: 4px 10px;
+                font-size: 13px;
             }
         }
         
@@ -242,7 +368,8 @@
         @media print {
             body {
                 background-color: white;
-                font-size: 12px;
+                font-size: 13px;
+                padding: 0;
             }
             
             .header, .month-header {
@@ -250,8 +377,30 @@
                 color-adjust: exact;
             }
             
-            .instructions, .footer {
+            .instructions, .footer, .filter-info {
                 display: none;
+            }
+            
+            td, th {
+                border: 1px solid #ccc;
+            }
+        }
+
+        /* Melhorias de acessibilidade */
+        @media (prefers-contrast: high) {
+            body {
+                color: black;
+                background-color: white;
+            }
+            
+            th, td {
+                border-color: black;
+            }
+            
+            .santa-ceia-obs {
+                background-color: #ffff99;
+                border: 2px solid #996600;
+                color: black;
             }
         }
     </style>
@@ -259,323 +408,29 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1><i class="fas fa-calendar-alt"></i> Escala de Ministérios - Igreja Evangélica Cristã Abba Pai</h1>
-            <p>Período: Fevereiro e Março 2026</p>
+            <h1><i class="fas fa-calendar-alt"></i> Escala de Ministérios</h1>
+            <p>Igreja Evangélica Cristã Abba Pai</p>
         </div>
         
-        <!-- Legend -->
+        <!-- Filter info - mostra colunas removidas (se houver) -->
+        <div class="filter-info" id="filter-info" style="display: none;">
+            <i class="fas fa-filter"></i>
+            <span id="filter-message"></span>
+        </div>
+        
+        <!-- Informações e Legenda -->
         <div class="instructions">
             <h3><i class="fas fa-info-circle"></i> Informações Importantes</h3>
-            <p><strong>Como usar:</strong> Role para os lados para ver toda a tabela em dispositivos móveis.</p>
-            
-            <div class="legend">
-                <div class="legend-item">
-                    <div class="legend-color" style="background-color: #FFF3CD;"></div>
-                    <span>Santa Ceia</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background-color: #F8D7DA;"></div>
-                    <span>Congresso</span>
-                </div>
-            </div>
+            <ul>
+                <li><strong>📱 Como usar:</strong> Role a tabela para os lados para ver todas as colunas em dispositivos móveis.</li>
+                <li><strong>👁️ Dica de leitura:</strong> Passe o mouse sobre as linhas para destacar a escala completa.</li>           
+            </ul>
         </div>
         
-        <!-- Fevereiro 2026 -->
-        <div class="month-section">
-            <div class="month-header">
-                <span><i class="far fa-calendar"></i> 📅 FEVEREIRO 2026</span>
-                <span>8 dias de escala</span>
-            </div>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Data</th>
-                            <th>Dia</th>
-                            <th>Palavra</th>
-                            <th>Louvor</th>
-                            <th>Intercessão</th>
-                            <th>Recepção</th>
-                            <th>Oferta</th>
-                            <th>AudioVisual</th>
-                            <th>Mídia</th>
-                            <th>Kids</th>
-                            <th>Oração Kids</th>
-                            <th>Observação</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="date-cell">01/fev</td>
-                            <td class="day-cell">Domingo</td>
-                            <td>Evaldo</td>
-                            <td>Pra. Elizabeth</td>
-                            <td>Márcio e Regiane</td>
-                            <td>Rafael e Michele</td>
-                            <td>Henrique</td>
-                            <td>Henrique</td>
-                            <td>Cláudio e Sueli</td>
-                            <td>Cristiane e Renan</td>
-                            <td>Cristiane</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td class="date-cell">04/fev</td>
-                            <td class="day-cell">Quarta-feira</td>
-                            <td>Leônidas</td>
-                            <td>Vera</td>
-                            <td>Solange</td>
-                            <td>Arnaldo</td>
-                            <td>Jéssica</td>
-                            <td>Renan</td>
-                            <td>Brenda</td>
-                            <td>—</td>
-                            <td>—</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td class="date-cell">08/fev</td>
-                            <td class="day-cell">Domingo</td>
-                            <td>Pr. Bruno</td>
-                            <td>Daniel</td>
-                            <td>Evaldo e Bárbara</td>
-                            <td>Arnaldo e Nilza</td>
-                            <td>Fernanda</td>
-                            <td>—</td>
-                            <td>Cláudio e Sueli</td>
-                            <td>Cristiane e Renan</td>
-                            <td>Cristiane</td>
-                            <td><span class="santa-ceia-obs">🥖 SANTA CEIA</span></td>
-                        </tr>
-                        <tr>
-                            <td class="date-cell">11/fev</td>
-                            <td class="day-cell">Quarta-feira</td>
-                            <td>Henrique</td>
-                            <td>Beatriz</td>
-                            <td>Nilza</td>
-                            <td>Renan</td>
-                            <td>Gustavo</td>
-                            <td>Henrique</td>
-                            <td>Renan</td>
-                            <td>—</td>
-                            <td>—</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td class="date-cell">15/fev</td>
-                            <td class="day-cell">Domingo</td>
-                            <td>Pr. Nelson</td>
-                            <td>Pra. Elizabeth</td>
-                            <td>Rafael e Michele</td>
-                            <td>Hélio e Cida</td>
-                            <td>Priscila</td>
-                            <td>Renan</td>
-                            <td>Cláudio e Sueli</td>
-                            <td><span class="congresso">🚫 CONGRESSO</span></td>
-                            <td>—</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td class="date-cell">18/fev</td>
-                            <td class="day-cell">Quarta-feira</td>
-                            <td>Arnaldo</td>
-                            <td>Pra. Elizabeth</td>
-                            <td>Nilza</td>
-                            <td>Arnaldo</td>
-                            <td>Solange</td>
-                            <td>Renan</td>
-                            <td>Brenda</td>
-                            <td>—</td>
-                            <td>—</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td class="date-cell">22/fev</td>
-                            <td class="day-cell">Domingo</td>
-                            <td>Márcio</td>
-                            <td>Beatriz</td>
-                            <td>Arnaldo e Nilza</td>
-                            <td>Cláudio e Sueli</td>
-                            <td>Renan</td>
-                            <td>Henrique</td>
-                            <td>Brenda</td>
-                            <td>Jéssica e Bárbara</td>
-                            <td>Jéssica</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td class="date-cell">25/fev</td>
-                            <td class="day-cell">Quarta-feira</td>
-                            <td>Beatriz</td>
-                            <td>Pra. Elizabeth</td>
-                            <td>Jéssica</td>
-                            <td>Arnaldo</td>
-                            <td>Joelson</td>
-                            <td>Henrique</td>
-                            <td>Renan</td>
-                            <td>—</td>
-                            <td>—</td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        
-        <!-- Março 2026 -->
-        <div class="month-section">
-            <div class="month-header">
-                <span><i class="far fa-calendar"></i> 📅 MARÇO 2026</span>
-                <span>9 dias de escala</span>
-            </div>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Data</th>
-                            <th>Dia</th>
-                            <th>Palavra</th>
-                            <th>Louvor</th>
-                            <th>Intercessão</th>
-                            <th>Recepção</th>
-                            <th>Oferta</th>
-                            <th>AudioVisual</th>
-                            <th>Mídia</th>
-                            <th>Kids</th>
-                            <th>Oração Kids</th>
-                            <th>Observação</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="date-cell">01/mar</td>
-                            <td class="day-cell">Domingo</td>
-                            <td>Bárbara</td>
-                            <td>Pra. Elizabeth</td>
-                            <td>Márcio e Regiane</td>
-                            <td>Arnaldo e Nilza</td>
-                            <td>Solange</td>
-                            <td>Renan</td>
-                            <td>Cláudio e Sueli</td>
-                            <td>Beatriz e Melissa</td>
-                            <td>Melissa</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td class="date-cell">04/mar</td>
-                            <td class="day-cell">Quarta-feira</td>
-                            <td>Jéssica</td>
-                            <td>Pra. Elizabeth</td>
-                            <td>Bárbara</td>
-                            <td>Arnaldo</td>
-                            <td>Nilza</td>
-                            <td>Renan</td>
-                            <td>Brenda</td>
-                            <td>—</td>
-                            <td>—</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td class="date-cell">08/mar</td>
-                            <td class="day-cell">Domingo</td>
-                            <td>Pra. Tatiane</td>
-                            <td>Beatriz</td>
-                            <td>Evaldo e Bárbara</td>
-                            <td>Hélio e Cida</td>
-                            <td>Fernanda</td>
-                            <td>Henrique</td>
-                            <td>Cláudio e Sueli</td>
-                            <td>Cristiane e Renan</td>
-                            <td>Renan</td>
-							<td><span class="santa-ceia-obs">🥖 SANTA CEIA</span></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td class="date-cell">11/mar</td>
-                            <td class="day-cell">Quarta-feira</td>
-                            <td>Melissa</td>
-                            <td>Beatriz</td>
-                            <td>Nilza</td>
-                            <td>Pr. Nelson</td>
-                            <td>Beatriz</td>
-                            <td>Henrique</td>
-                            <td>Brenda</td>
-                            <td>—</td>
-                            <td>—</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td class="date-cell">15/mar</td>
-                            <td class="day-cell">Domingo</td>
-                            <td>Renata</td>
-                            <td>Pra. Elizabeth</td>
-                            <td>Márcio e Regiane</td>
-                            <td>Rafael e Michele</td>
-                            <td>Priscila</td>
-                            <td>Renan</td>
-                            <td>Cláudio e Sueli</td>
-                            <td>Jéssica e Bárbara</td>
-                            <td>Bárbara</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td class="date-cell">18/mar</td>
-                            <td class="day-cell">Quarta-feira</td>
-                            <td>Brenda</td>
-                            <td>Pra. Elizabeth</td>
-                            <td>Jéssica</td>
-                            <td>Arnaldo</td>
-                            <td>Vera</td>
-                            <td>Renan</td>
-                            <td>-</td>
-                            <td>—</td>
-                            <td>—</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td class="date-cell">22/mar</td>
-                            <td class="day-cell">Domingo</td>
-                            <td>Cristiane</td>
-                            <td>Beatriz</td>
-                            <td>Arnaldo e Nilza</td>
-                            <td>Cláudio e Sueli</td>
-                            <td>Regiane</td>
-                            <td>Henrique</td>
-                            <td>-</td>
-                            <td>Fernanda e Brenda</td>
-                            <td>Brenda</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td class="date-cell">25/mar</td>
-                            <td class="day-cell">Quarta-feira</td>
-                            <td>Priscila</td>
-                            <td>Pra. Elizabeth</td>
-                            <td>Nilza</td>
-                            <td>Evaldo</td>
-                            <td>Solange</td>
-                            <td>Renan</td>
-                            <td>Renan</td>
-                            <td>—</td>
-                            <td>—</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td class="date-cell">29/mar</td>
-                            <td class="day-cell">Domingo</td>
-                            <td>Pra. Elizabeth</td>
-                            <td>Beatriz</td>
-                            <td>Evaldo e Bárbara</td>
-                            <td>Márcio e Regiane</td>
-                            <td>Sueli</td>
-                            <td>Leônidas</td>
-                            <td>Cláudio e Sueli</td>
-                            <td>Fernanda e Brenda</td>
-                            <td>Fernanda</td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
+        <!-- Área dinâmica onde as escalas serão inseridas -->
+        <div id="escalas-container">
+            <div class="loading">
+                <i class="fas fa-spinner fa-pulse"></i> Carregando escala...
             </div>
         </div>
         
@@ -583,10 +438,233 @@
             <p>© 2026 - Escala de Ministérios - Igreja Evangélica Cristã Abba Pai</p>
             <div class="update-info">
                 <i class="fas fa-sync-alt"></i>
-                <span>Atualizado em: 17/02/2026 às 23:00</span>
+                <span id="data-atualizacao">Atualizado via API</span>
             </div>
         </div>
     </div>
+
+    <script>
+        // Função para formatar a data (DD/MM/AAAA -> DD/mês abreviado)
+        function formatarData(dataStr) {
+            if (!dataStr) return '';
+            const partes = dataStr.split('/');
+            if (partes.length !== 3) return dataStr;
+            
+            const dia = partes[0];
+            const mes = partes[1];
+            const mesesAbrev = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+            const mesAbrev = mesesAbrev[parseInt(mes, 10) - 1] || '';
+            
+            return `${dia}/${mesAbrev}`;
+        }
+
+        // Função para processar célula com formatação especial
+        function formatarCelula(valor, coluna) {
+            if (!valor || valor === '—') return '—';
+            
+            // Verifica se é a coluna Observação com conteúdos especiais
+            if (coluna === 'Observação') {
+                // Verifica se contém Santa Ceia (com ou sem emoji)
+                if (valor.includes('SANTA CEIA') || valor.includes('🥖')) {
+                    return `<span class="santa-ceia-obs">${valor}</span>`;
+                }
+            }
+            
+            return valor;
+        }
+
+        // Função para normalizar o status
+        function normalizarStatus(status) {
+            if (!status) return '';
+            return status.toString().trim().toLowerCase();
+        }
+
+        // Função para verificar se uma coluna tem algum valor "Inativo"
+        function colunaTemInativo(dados, nomeColuna) {
+            return dados.some(item => {
+                const valor = item[nomeColuna];
+                if (!valor) return false;
+                const valorStr = valor.toString().toLowerCase();
+                return valorStr.includes('inativo');
+            });
+        }
+
+        // Função principal para buscar e renderizar os dados
+        async function carregarEscala() {
+            const container = document.getElementById('escalas-container');
+            const dataAtualizacao = document.getElementById('data-atualizacao');
+            const filterInfo = document.getElementById('filter-info');
+            const filterMessage = document.getElementById('filter-message');
+            
+            try {
+                // Faz a requisição à API
+                const resposta = await fetch('https://sheetdb.io/api/v1/q90nhb3xq4i8t');
+                if (!resposta.ok) {
+                    throw new Error('Erro ao carregar dados da API');
+                }
+                
+                const dados = await resposta.json();
+                
+                // Atualiza data de atualização
+                const agora = new Date();
+                dataAtualizacao.textContent = `Atualizado em: ${agora.toLocaleDateString('pt-BR')} às ${agora.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})}`;
+                
+                // Filtra apenas entradas com dados válidos E com status "Ativo"
+                const statusIgnorados = ['inativo', 'pendente', ''];
+                
+                const escalasValidas = dados.filter(item => {
+                    if (!item.Data || item.Data.trim() === '') return false;
+                    const status = normalizarStatus(item.Status);
+                    return !statusIgnorados.includes(status);
+                });
+                
+                if (escalasValidas.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-calendar-times"></i>
+                            <p>Nenhuma escala encontrada para o período.</p>
+                        </div>
+                    `;
+                    filterInfo.style.display = 'none';
+                    return;
+                }
+                
+                // Define a lista completa de colunas que queremos exibir
+                const todasColunas = [
+                    { nome: 'Data', titulo: 'Data', fixa: true },
+                    { nome: 'Dia', titulo: 'Dia', fixa: true },
+                    { nome: 'Palavra', titulo: 'Palavra', fixa: false },
+                    { nome: 'Louvor', titulo: 'Louvor', fixa: false },
+                    { nome: 'Intercessão', titulo: 'Intercessão', fixa: false },
+                    { nome: 'Recepção', titulo: 'Recepção', fixa: false },
+                    { nome: 'Oferta', titulo: 'Oferta', fixa: false },
+                    { nome: 'AudioVisual', titulo: 'AudioVisual', fixa: false },
+                    { nome: 'Mídia', titulo: 'Mídia', fixa: false },
+                    { nome: 'Observação', titulo: 'Observação', fixa: false }
+                ];
+                
+                // Verifica quais colunas têm valores "Inativo"
+                const colunasParaRemover = [];
+                todasColunas.forEach(coluna => {
+                    if (coluna.fixa) return;
+                    if (colunaTemInativo(escalasValidas, coluna.nome)) {
+                        colunasParaRemover.push(coluna.nome);
+                    }
+                });
+                
+                // Filtra as colunas que serão exibidas
+                const colunasExibidas = todasColunas.filter(coluna => 
+                    !colunasParaRemover.includes(coluna.nome)
+                );
+                
+                // Mostra mensagem sobre colunas removidas
+                if (colunasParaRemover.length > 0) {
+                    const nomesColunasRemovidas = colunasParaRemover.map(nome => {
+                        const col = todasColunas.find(c => c.nome === nome);
+                        return col ? col.titulo : nome;
+                    }).join(', ');
+                    
+                    filterMessage.textContent = `Colunas ocultadas por conterem "Inativo": ${nomesColunasRemovidas}`;
+                    filterInfo.style.display = 'flex';
+                } else {
+                    filterInfo.style.display = 'none';
+                }
+                
+                // Agrupa por mês
+                const escalasPorMes = {};
+                
+                escalasValidas.forEach(item => {
+                    const mes = item.Mès;
+                    if (!mes) return;
+                    
+                    if (!escalasPorMes[mes]) {
+                        escalasPorMes[mes] = [];
+                    }
+                    escalasPorMes[mes].push(item);
+                });
+                
+                // Gera o HTML para cada mês
+                let htmlGerado = '';
+                
+                Object.keys(escalasPorMes).forEach(mes => {
+                    const escalasMes = escalasPorMes[mes];
+                    
+                    // Ordena por data
+                    escalasMes.sort((a, b) => {
+                        const dataA = a.Data.split('/').reverse().join('-');
+                        const dataB = b.Data.split('/').reverse().join('-');
+                        return dataA.localeCompare(dataB);
+                    });
+                    
+                    const totalDias = escalasMes.length;
+                    
+                    // Monta o cabeçalho da tabela
+                    let cabecalhoTabela = '<tr>';
+                    colunasExibidas.forEach(coluna => {
+                        cabecalhoTabela += `<th>${coluna.titulo}</th>`;
+                    });
+                    cabecalhoTabela += '</tr>';
+                    
+                    // Monta as linhas da tabela
+                    let linhasTabela = '';
+                    escalasMes.forEach(item => {
+                        let linha = '<tr>';
+                        
+                        colunasExibidas.forEach(coluna => {
+                            let valor = item[coluna.nome] || '—';
+                            
+                            if (coluna.nome === 'Data') {
+                                linha += `<td class="date-cell">${formatarData(valor)}</td>`;
+                            } else if (coluna.nome === 'Dia') {
+                                linha += `<td class="day-cell">${valor}</td>`;
+                            } else if (coluna.nome === 'Observação') {
+                                linha += `<td>${formatarCelula(valor, coluna.nome)}</td>`;
+                            } else {
+                                linha += `<td>${valor}</td>`;
+                            }
+                        });
+                        
+                        linha += '</tr>';
+                        linhasTabela += linha;
+                    });
+                    
+                    htmlGerado += `
+                        <div class="month-section">
+                            <div class="month-header">
+                                <span><i class="far fa-calendar"></i> ${mes}</span>
+                                <span>${totalDias} ${totalDias === 1 ? 'dia' : 'dias'}</span>
+                            </div>
+                            <div class="table-container">
+                                <table>
+                                    <thead>
+                                        ${cabecalhoTabela}
+                                    </thead>
+                                    <tbody>
+                                        ${linhasTabela}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                container.innerHTML = htmlGerado;
+                
+            } catch (error) {
+                console.error('Erro:', error);
+                container.innerHTML = `
+                    <div class="instructions" style="color: #721C24; background-color: #F8D7DA; border: 1px solid #F5C6CB; border-left: 6px solid #a13030;">
+                        <h3><i class="fas fa-exclamation-triangle"></i> Erro ao carregar escala</h3>
+                        <p>Não foi possível carregar os dados da escala. Tente novamente mais tarde.</p>
+                        <p style="font-size: 14px; margin-top: 10px;">Detalhes: ${error.message}</p>
+                    </div>
+                `;
+                filterInfo.style.display = 'none';
+            }
+        }
+
+        // Carrega os dados assim que a página estiver pronta
+        document.addEventListener('DOMContentLoaded', carregarEscala);
+    </script>
 </body>
 </html>
-
