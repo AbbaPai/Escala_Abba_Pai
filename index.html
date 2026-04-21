@@ -98,7 +98,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 1000px; /* Aumentado para acomodar nova coluna */
+            min-width: 1000px;
         }
         
         th {
@@ -254,6 +254,7 @@
             width: fit-content;
             margin-left: auto;
             margin-right: auto;
+            flex-wrap: wrap;
         }
         
         /* Loading state */
@@ -309,6 +310,61 @@
             font-size: 20px;
         }
         
+        /* Botões de controle */
+        .control-buttons {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            background-color: #1a5f7a;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .btn-danger {
+            background-color: #dc3545;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+        
+        .btn-success {
+            background-color: #28a745;
+        }
+        
+        .btn-success:hover {
+            background-color: #218838;
+        }
+        
+        .timer-display {
+            background-color: #1a5f7a;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-family: monospace;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        
         /* WhatsApp specific optimizations */
         @media (max-width: 480px) {
             body {
@@ -362,6 +418,11 @@
                 padding: 4px 10px;
                 font-size: 13px;
             }
+            
+            .btn {
+                padding: 8px 16px;
+                font-size: 12px;
+            }
         }
         
         /* Print styles */
@@ -377,7 +438,7 @@
                 color-adjust: exact;
             }
             
-            .instructions, .footer, .filter-info {
+            .instructions, .footer, .filter-info, .control-buttons {
                 display: none;
             }
             
@@ -423,7 +484,8 @@
             <h3><i class="fas fa-info-circle"></i> Informações Importantes</h3>
             <ul>
                 <li><strong>📱 Como usar:</strong> Role a tabela para os lados para ver todas as colunas em dispositivos móveis.</li>
-                <li><strong>👁️ Dica de leitura:</strong> Passe o mouse sobre as linhas para destacar a escala completa.</li>           
+                <li><strong>👁️ Dica de leitura:</strong> Passe o mouse sobre as linhas para destacar a escala completa.</li>
+                <li><strong>🔄 Auto-atualização:</strong> Os dados são atualizados automaticamente a cada 1 hora.</li>
             </ul>
         </div>
         
@@ -436,14 +498,32 @@
         
         <div class="footer">
             <p>© 2026 - Escala de Ministérios - Igreja Evangélica Cristã Abba Pai</p>
-            <div class="update-info">
+            <div class="update-info" id="update-info">
                 <i class="fas fa-sync-alt"></i>
                 <span id="data-atualizacao">Atualizado via API</span>
+                <span id="timer-display" class="timer-display"></span>
+            </div>
+            <div class="control-buttons">
+                <button id="btnRecarregarAgora" class="btn">
+                    <i class="fas fa-sync-alt"></i> Recarregar Agora
+                </button>
+                <button id="btnPararRecarga" class="btn btn-danger">
+                    <i class="fas fa-stop"></i> Parar Auto-Atualização
+                </button>
+                <button id="btnReiniciarRecarga" class="btn btn-success" style="display: none;">
+                    <i class="fas fa-play"></i> Reiniciar Auto-Atualização
+                </button>
             </div>
         </div>
     </div>
 
     <script>
+        // Variáveis globais
+        let intervaloRecarga = null;
+        let timerInterval = null;
+        let tempoRestante = 3600; // 1 hora em segundos
+        let autoRecargaAtiva = true;
+
         // Função para formatar a data (DD/MM/AAAA -> DD/mês abreviado)
         function formatarData(dataStr) {
             if (!dataStr) return '';
@@ -489,6 +569,105 @@
             });
         }
 
+        // Função para atualizar o timer visual
+        function atualizarTimerDisplay() {
+            const timerDisplay = document.getElementById('timer-display');
+            if (timerDisplay && autoRecargaAtiva) {
+                const horas = Math.floor(tempoRestante / 3600);
+                const minutos = Math.floor((tempoRestante % 3600) / 60);
+                const segundos = tempoRestante % 60;
+                timerDisplay.textContent = `🔄 Próx: ${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}:${segundos.toString().padStart(2, '0')}`;
+            } else if (timerDisplay && !autoRecargaAtiva) {
+                timerDisplay.textContent = `⏸️ Auto-atualização pausada`;
+            }
+        }
+
+        // Função para iniciar o timer visual
+        function iniciarTimerVisual() {
+            if (timerInterval) clearInterval(timerInterval);
+            
+            timerInterval = setInterval(() => {
+                if (autoRecargaAtiva && tempoRestante > 0) {
+                    tempoRestante--;
+                    atualizarTimerDisplay();
+                    
+                    // Reset quando chegar a zero
+                    if (tempoRestante === 0) {
+                        tempoRestante = 3600;
+                    }
+                }
+            }, 1000);
+        }
+
+        // Função para parar o recarregamento automático
+        function pararRecarregamentoAutomatico() {
+            if (intervaloRecarga) {
+                clearInterval(intervaloRecarga);
+                intervaloRecarga = null;
+            }
+            autoRecargaAtiva = false;
+            
+            // Atualizar interface dos botões
+            document.getElementById('btnPararRecarga').style.display = 'none';
+            document.getElementById('btnReiniciarRecarga').style.display = 'inline-flex';
+            
+            // Mostrar mensagem
+            const dataAtualizacao = document.getElementById('data-atualizacao');
+            const originalText = dataAtualizacao.textContent;
+            if (!originalText.includes('[Auto-atualização pausada]')) {
+                dataAtualizacao.textContent = originalText + ' [Auto-atualização pausada]';
+            }
+            
+            atualizarTimerDisplay();
+            console.log('⏸️ Auto-atualização automática pausada');
+        }
+
+        // Função para reiniciar o recarregamento automático
+        function reiniciarRecarregamentoAutomatico() {
+            if (intervaloRecarga) {
+                clearInterval(intervaloRecarga);
+            }
+            
+            autoRecargaAtiva = true;
+            tempoRestante = 3600;
+            
+            // Configurar novo intervalo
+            intervaloRecarga = setInterval(() => {
+                console.log('🔄 Recarregando dados automaticamente...');
+                
+                const container = document.getElementById('escalas-container');
+                const loadingHtml = `
+                    <div class="loading">
+                        <i class="fas fa-spinner fa-pulse"></i> Atualizando dados automaticamente...
+                    </div>
+                `;
+                
+                if (container.innerHTML.trim() !== '') {
+                    container.innerHTML = loadingHtml;
+                }
+                
+                carregarEscala();
+                
+                const agora = new Date();
+                console.log(`✅ Dados atualizados em: ${agora.toLocaleTimeString('pt-BR')}`);
+                
+            }, 3600000); // 1 hora
+            
+            // Atualizar interface dos botões
+            document.getElementById('btnPararRecarga').style.display = 'inline-flex';
+            document.getElementById('btnReiniciarRecarga').style.display = 'none';
+            
+            // Remover mensagem de pausa
+            const dataAtualizacao = document.getElementById('data-atualizacao');
+            const currentText = dataAtualizacao.textContent;
+            if (currentText.includes('[Auto-atualização pausada]')) {
+                dataAtualizacao.textContent = currentText.replace(' [Auto-atualização pausada]', '');
+            }
+            
+            atualizarTimerDisplay();
+            console.log('▶️ Auto-atualização automática reiniciada');
+        }
+
         // Função principal para buscar e renderizar os dados
         async function carregarEscala() {
             const container = document.getElementById('escalas-container');
@@ -507,7 +686,11 @@
                 
                 // Atualiza data de atualização
                 const agora = new Date();
-                dataAtualizacao.textContent = `Atualizado em: ${agora.toLocaleDateString('pt-BR')} às ${agora.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})}`;
+                let statusText = `Atualizado em: ${agora.toLocaleDateString('pt-BR')} às ${agora.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})}`;
+                if (!autoRecargaAtiva) {
+                    statusText += ' [Auto-atualização pausada]';
+                }
+                dataAtualizacao.textContent = statusText;
                 
                 // Filtra apenas entradas com dados válidos E com status "Ativo"
                 const statusIgnorados = ['inativo', 'pendente', ''];
@@ -538,7 +721,7 @@
                     { nome: 'Intercessão', titulo: 'Intercessão', fixa: false },
                     { nome: 'Recepção', titulo: 'Recepção', fixa: false },
                     { nome: 'Oferta', titulo: 'Oferta', fixa: false },
-                    { nome: 'Kids', titulo: 'Kids', fixa: false }, // NOVA COLUNA ADICIONADA
+                    { nome: 'Kids', titulo: 'Kids', fixa: false },
                     { nome: 'AudioVisual', titulo: 'AudioVisual', fixa: false },
                     { nome: 'Mídia', titulo: 'Mídia', fixa: false },
                     { nome: 'Observação', titulo: 'Observação', fixa: false }
@@ -664,8 +847,70 @@
             }
         }
 
-        // Carrega os dados assim que a página estiver pronta
-        document.addEventListener('DOMContentLoaded', carregarEscala);
+        // Iniciar recarregamento automático
+        function iniciarRecarregamentoAutomatico() {
+            if (intervaloRecarga) {
+                clearInterval(intervaloRecarga);
+            }
+            
+            intervaloRecarga = setInterval(() => {
+                if (autoRecargaAtiva) {
+                    console.log('🔄 Recarregando dados automaticamente...');
+                    
+                    const container = document.getElementById('escalas-container');
+                    const loadingHtml = `
+                        <div class="loading">
+                            <i class="fas fa-spinner fa-pulse"></i> Atualizando dados automaticamente...
+                        </div>
+                    `;
+                    
+                    if (container.innerHTML.trim() !== '') {
+                        container.innerHTML = loadingHtml;
+                    }
+                    
+                    carregarEscala();
+                    
+                    const agora = new Date();
+                    console.log(`✅ Dados atualizados em: ${agora.toLocaleTimeString('pt-BR')}`);
+                }
+            }, 3600000); // 1 hora
+        }
+
+        // Configurar eventos dos botões
+        function configurarEventos() {
+            document.getElementById('btnRecarregarAgora').addEventListener('click', () => {
+                const container = document.getElementById('escalas-container');
+                container.innerHTML = `
+                    <div class="loading">
+                        <i class="fas fa-spinner fa-pulse"></i> Recarregando manualmente...
+                    </div>
+                `;
+                carregarEscala();
+            });
+            
+            document.getElementById('btnPararRecarga').addEventListener('click', () => {
+                pararRecarregamentoAutomatico();
+            });
+            
+            document.getElementById('btnReiniciarRecarga').addEventListener('click', () => {
+                reiniciarRecarregamentoAutomatico();
+            });
+        }
+
+        // Inicialização da página
+        document.addEventListener('DOMContentLoaded', () => {
+            // Carrega os dados
+            carregarEscala();
+            
+            // Inicia o recarregamento automático
+            iniciarRecarregamentoAutomatico();
+            
+            // Inicia o timer visual
+            iniciarTimerVisual();
+            
+            // Configura eventos dos botões
+            configurarEventos();
+        });
     </script>
 </body>
 </html>
