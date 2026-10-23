@@ -30,6 +30,20 @@
     .name-filter input:focus-visible { outline:2px solid #bc8155; outline-offset:2px; }
     .name-filter p { margin:0; font-size:12px; color:var(--muted); }
     .role.is-match { background:#fff0e3; border-radius:6px; }
+    .view-switch { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-bottom:18px; }
+    .view-switch span { font-size:13px; margin-right:4px; color:var(--muted); }
+    .view-switch button { margin:0; color:var(--navy); background:#fff; border:1px solid #c4cede; }
+    .view-switch button[aria-pressed="true"] { color:#fff; background:var(--navy); border-color:var(--navy); }
+    .table-hint { margin:0 0 9px; color:var(--muted); font-size:12px; }
+    .table-view { overflow-x:auto; background:#fff; border:1px solid var(--line); border-radius:12px; }
+    .table-view:focus-visible { outline:2px solid #bc8155; outline-offset:2px; }
+    .schedule-table { border-collapse:separate; border-spacing:0; width:100%; min-width:1250px; font-size:14px; }
+    .schedule-table th,.schedule-table td { text-align:left; vertical-align:top; padding:13px 12px; border-bottom:1px solid var(--line); white-space:pre-line; overflow-wrap:anywhere; min-width:100px; }
+    .schedule-table th { background:#edf0f7; font-size:12px; font-weight:650; }
+    .schedule-table tr:last-child td { border-bottom:0; }
+    .schedule-table td:first-child,.schedule-table th:first-child { position:sticky; left:0; min-width:92px; background:#fff; box-shadow:1px 0 0 var(--line); font-weight:600; }
+    .schedule-table th:first-child { background:#edf0f7; z-index:1; }
+    .schedule-table td.is-match { background:#fff0e3; }
     .active-label { display:inline-block; font-size:11px; font-weight:600; color:#244e3b; background:#e4f0e9; padding:3px 8px; border-radius:20px; margin-top:7px; }
     .notice { padding:14px 16px; margin:0 0 20px; background:#fff0dd; border:1px solid #e8ccaa; border-radius:10px; color:#654424; font-size:14px; }
     .notice p { margin:0; }
@@ -79,6 +93,7 @@
     </div>
   </header>
   <main class="main">
+    <div class="view-switch" role="group" aria-label="Modo de visualização"><span>Visualização</span><button type="button" id="view-cards" aria-pressed="true">Por culto</button><button type="button" id="view-list" aria-pressed="false">Lista</button></div>
     <div class="name-filter"><label for="name-search">Encontre sua escala</label><input type="search" id="name-search" placeholder="Digite seu nome" autocomplete="off" aria-describedby="search-hint search-result"><p id="search-hint">Busca em todos os ministérios, incluindo Kids e Babykids.</p><p id="search-result" role="status" hidden></p></div>
     <div class="refresh-bar"><p>Somente escalas Ativas · de hoje em diante</p><button type="button" id="refresh-now">Atualizar agora</button></div>
     <div class="status"><span id="last-update" role="status">Buscando a escala…</span><span id="next-update">Atualização automática a cada 1 hora</span></div>
@@ -106,6 +121,10 @@
     const refreshNow = document.getElementById('refresh-now');
     const nameSearch = document.getElementById('name-search');
     const searchResult = document.getElementById('search-result');
+    const cardsButton = document.getElementById('view-cards');
+    const listButton = document.getElementById('view-list');
+    let viewMode = 'cards';
+    try { if (localStorage.getItem('abba-view') === 'list') viewMode = 'list'; } catch (_) {}
     let loading = false;
     let loaded = false;
     let refreshTimer = null;
@@ -195,6 +214,43 @@
       }
       return card;
     }
+    function makeTable(rows) {
+      const region = element('div','table-view');
+      region.setAttribute('role','region');
+      region.setAttribute('aria-label','Escala em lista: role para os lados para ver os ministérios');
+      region.setAttribute('tabindex','0');
+      const table = element('table','schedule-table');
+      const head = element('thead');
+      const headRow = element('tr');
+      ['Data','Dia',...MINISTRIES,'Observação'].forEach(name => {
+        const cell = element('th','',name);
+        cell.setAttribute('scope','col');
+        headRow.append(cell);
+      });
+      head.append(headRow);
+      const body = element('tbody');
+      rows.forEach(row => {
+        const tr = element('tr');
+        tr.append(element('td','',dateText(row.date,{day:'2-digit',month:'2-digit'})),element('td','',dateText(row.date,{weekday:'long'})));
+        const query = normalized(nameSearch.value);
+        MINISTRIES.forEach(name => {
+          const value = displayValue(row.item[name]);
+          tr.append(element('td',query && normalized(value).includes(query) ? 'is-match' : '',value));
+        });
+        tr.append(element('td','',displayValue(row.item['Observação'])));
+        body.append(tr);
+      });
+      table.append(head,body);
+      region.append(table);
+      return region;
+    }
+    function setView(mode) {
+      viewMode = mode === 'list' ? 'list' : 'cards';
+      cardsButton.setAttribute('aria-pressed',String(viewMode === 'cards'));
+      listButton.setAttribute('aria-pressed',String(viewMode === 'list'));
+      try { localStorage.setItem('abba-view',viewMode); } catch (_) {}
+      if (loaded) render(cachedRows);
+    }
     function render(rows) {
       const today = todayKey();
       renderedDay = today;
@@ -221,9 +277,14 @@
         title.id = `month-${key}`;
         section.setAttribute('aria-labelledby', title.id);
         heading.append(title, element('span','count',`${items.length} ${items.length === 1 ? 'culto' : 'cultos'}`));
-        const cards = element('div','cards');
-        items.forEach(row => cards.append(makeCard(row, row === next)));
-        section.append(heading, cards);
+        section.append(heading);
+        if (viewMode === 'list') {
+          section.append(element('p','table-hint','No celular, deslize a tabela para os lados. A data permanece visível.'),makeTable(items));
+        } else {
+          const cards = element('div','cards');
+          items.forEach(row => cards.append(makeCard(row, row === next)));
+          section.append(cards);
+        }
         fragment.append(section);
       });
       schedule.replaceChildren(fragment);
@@ -283,6 +344,9 @@
     retry.addEventListener('click', loadSchedule);
     refreshNow.addEventListener('click', loadSchedule);
     nameSearch.addEventListener('input', () => { if (loaded) render(cachedRows); });
+    cardsButton.addEventListener('click', () => setView('cards'));
+    listButton.addEventListener('click', () => setView('list'));
+    setView(viewMode);
     document.addEventListener('visibilitychange', () => {
       if (!document.hidden) checkDayChange();
       if (!document.hidden && nextRefreshAt && Date.now() >= nextRefreshAt) loadSchedule();
