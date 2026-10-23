@@ -24,6 +24,12 @@
     .refresh-bar { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:18px; }
     .refresh-bar p { color:var(--muted); font-size:12px; margin:0; }
     .refresh-bar button { margin-top:0; }
+    .name-filter { display:grid; gap:6px; margin-bottom:18px; }
+    .name-filter label { font-size:14px; font-weight:600; }
+    .name-filter input { width:100%; min-width:0; min-height:46px; padding:11px 13px; font:inherit; font-size:16px; color:var(--text); background:#fff; border:1px solid #c4cede; border-radius:9px; }
+    .name-filter input:focus-visible { outline:2px solid #bc8155; outline-offset:2px; }
+    .name-filter p { margin:0; font-size:12px; color:var(--muted); }
+    .role.is-match { background:#fff0e3; border-radius:6px; }
     .active-label { display:inline-block; font-size:11px; font-weight:600; color:#244e3b; background:#e4f0e9; padding:3px 8px; border-radius:20px; margin-top:7px; }
     .notice { padding:14px 16px; margin:0 0 20px; background:#fff0dd; border:1px solid #e8ccaa; border-radius:10px; color:#654424; font-size:14px; }
     .notice p { margin:0; }
@@ -73,6 +79,7 @@
     </div>
   </header>
   <main class="main">
+    <div class="name-filter"><label for="name-search">Encontre sua escala</label><input type="search" id="name-search" placeholder="Digite seu nome" autocomplete="off" aria-describedby="search-hint search-result"><p id="search-hint">Busca em todos os ministérios, incluindo Kids e Babykids.</p><p id="search-result" role="status" hidden></p></div>
     <div class="refresh-bar"><p>Somente escalas Ativas · de hoje em diante</p><button type="button" id="refresh-now">Atualizar agora</button></div>
     <div class="status"><span id="last-update" role="status">Buscando a escala…</span><span id="next-update">Atualização automática a cada 1 hora</span></div>
     <div class="notice" id="error-notice" role="alert" hidden><p id="error-message"></p><button type="button" id="retry">Tentar novamente</button></div>
@@ -97,6 +104,8 @@
     const dataNotice = document.getElementById('data-notice');
     const retry = document.getElementById('retry');
     const refreshNow = document.getElementById('refresh-now');
+    const nameSearch = document.getElementById('name-search');
+    const searchResult = document.getElementById('search-result');
     let loading = false;
     let loaded = false;
     let refreshTimer = null;
@@ -161,7 +170,7 @@
       date.setAttribute('aria-hidden','true');
       date.append(element('strong', '', String(row.day).padStart(2,'0')), element('span', '', dateText(row.date, {month:'short'}).replace('.','')));
       const title = element('div', 'cult-title');
-      if (isNext) title.append(element('span', 'next-label', 'Próximo culto · por data'));
+      if (isNext) title.append(element('span', 'next-label', text(nameSearch.value) ? 'Próxima escala encontrada' : 'Próximo culto · por data'));
       const day = dateText(row.date, {weekday:'long'});
       title.append(element('h3', '', day.charAt(0).toUpperCase() + day.slice(1)));
       const fullDate = element('time', 'full-date', dateText(row.date, {day:'2-digit', month:'long', year:'numeric'}));
@@ -171,7 +180,8 @@
       header.append(date, title);
       const roles = element('dl', 'roles');
       MINISTRIES.forEach(name => {
-        const role = element('div', 'role');
+        const match = normalized(nameSearch.value);
+        const role = element('div', match && normalized(displayValue(row.item[name])).includes(match) ? 'role is-match' : 'role');
         role.append(element('dt','',name), element('dd','',displayValue(row.item[name])));
         roles.append(role);
       });
@@ -190,8 +200,12 @@
       renderedDay = today;
       // A escala fica visível durante todo o dia, no horário de Brasília.
       rows = rows.filter(row => row.key >= today);
+      const query = normalized(nameSearch.value);
+      if (query) rows = rows.filter(row => MINISTRIES.some(name => normalized(displayValue(row.item[name])).includes(query)));
+      searchResult.hidden = !query;
+      searchResult.textContent = query ? `${rows.length} ${rows.length === 1 ? 'culto encontrado' : 'cultos encontrados'} para “${text(nameSearch.value)}”.` : '';
       const fragment = document.createDocumentFragment();
-      if (!rows.length) fragment.append(element('p','empty','Nenhuma escala ativa para hoje ou para os próximos dias.'));
+      if (!rows.length) fragment.append(element('p','empty',query ? 'Nenhuma escala encontrada para esse nome entre as escalas ativas de hoje em diante. Apague a busca para ver todas.' : 'Nenhuma escala ativa para hoje ou para os próximos dias.'));
       const next = rows[0];
       const months = new Map();
       rows.forEach(row => {
@@ -268,6 +282,7 @@
     }
     retry.addEventListener('click', loadSchedule);
     refreshNow.addEventListener('click', loadSchedule);
+    nameSearch.addEventListener('input', () => { if (loaded) render(cachedRows); });
     document.addEventListener('visibilitychange', () => {
       if (!document.hidden) checkDayChange();
       if (!document.hidden && nextRefreshAt && Date.now() >= nextRefreshAt) loadSchedule();
